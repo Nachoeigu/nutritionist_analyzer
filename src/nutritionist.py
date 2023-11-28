@@ -20,19 +20,21 @@ class Nutritionist:
         thread_id = self.thread.id,
         assistant_id = 'asst_oEXHXSW0bP7D2gPz39nDxVtd'
         )
+        while True:
+            run = self.client.beta.threads.runs.retrieve(
+            thread_id = self.thread.id,
+            run_id = run.id
+            )
+            
+            if run.status == 'completed':
+                break
 
-        run = self.client.beta.threads.runs.retrieve(
-        thread_id = self.thread.id,
-        run_id = run.id
-        )
+            time.sleep(2)
 
-        if run.completed_at is None:
-            time.sleep(10)
 
         messages = self.client.beta.threads.messages.list(
             thread_id = self.thread.id
         )
         result = messages.data[0].content[0].text.value
-
 
         return result

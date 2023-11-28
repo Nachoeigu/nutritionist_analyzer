@@ -1,6 +1,6 @@
 import os
 import requests
-from functions import customizing_request, extracting_info
+from .functions import customizing_request, extracting_info, load_images
 from dotenv import load_dotenv
 
 class InvalidPetition(Exception):
@@ -13,7 +13,8 @@ class ImageRecognizer:
         self.openai_token =os.getenv('openai_token')
         self.model = model
 
-    def extract_data_from_image(self, pic_url:list):
+    def extract_data_from_image(self):
+        pic_url = load_images()
         headers, payload = customizing_request(self.openai_token, 
                             model = self.model,
                             img_path = pic_url)

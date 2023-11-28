@@ -1,11 +1,20 @@
 import base64
 import copy
-from constants import HEADERS_IMG_RECOGNIZER_STRUCTURE, PAYLOAD_IMG_RECOGNIZER_STRUCTURE
+from .constants import HEADERS_IMG_RECOGNIZER_STRUCTURE, PAYLOAD_IMG_RECOGNIZER_STRUCTURE, IMAGE_EXTENSIONS
 import json
 import os
 
+def load_images():
+    images = []
+    for root, dirs, files in os.walk('./input_images'):
+        for file in files:
+            if file.lower().endswith(tuple(IMAGE_EXTENSIONS)):
+                images.append(os.path.join(root, file))
+
+    return images
+
 def encoding_img(img_name):
-    with open(f'./input_images/{img_name}', 'rb') as image_file: 
+    with open(img_name, 'rb') as image_file: 
         encoded_string = base64.b64encode(image_file.read()) 
         return encoded_string.decode('utf-8')
 
