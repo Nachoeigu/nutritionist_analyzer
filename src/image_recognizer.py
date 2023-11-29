@@ -15,6 +15,7 @@ class ImageRecognizer:
 
     def extract_data_from_image(self):
         pic_url = load_images()
+
         headers, payload = customizing_request(self.openai_token, 
                             model = self.model,
                             img_path = pic_url)

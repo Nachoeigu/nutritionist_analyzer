@@ -13,11 +13,11 @@ def load_images():
 
     return images
 
-def encoding_img(img_name):
-    with open(img_name, 'rb') as image_file: 
-        encoded_string = base64.b64encode(image_file.read()) 
-        return encoded_string.decode('utf-8')
-
+def encoding_img(img):
+    img = open(img, 'rb')
+    encoded_string = base64.b64encode(img.read()) 
+    img.close()
+    return encoded_string.decode('utf-8')
 
 def customizing_request(openai_token, model, img_path):
     custom_header = copy.copy(HEADERS_IMG_RECOGNIZER_STRUCTURE)
