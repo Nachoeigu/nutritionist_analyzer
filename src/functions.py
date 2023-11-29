@@ -24,11 +24,12 @@ def customizing_request(openai_token, model, img_path):
     custom_header['Authorization'] = 'Bearer ' + openai_token
     custom_payload = copy.copy(PAYLOAD_IMG_RECOGNIZER_STRUCTURE)
     custom_payload['model'] = model
-    for n_image, image in enumerate(img_path):
+    for image in img_path:
         custom_payload['messages'][1]['content'].append({
             "type": "image_url",
             "image_url": {
-                "url": 'data:image/jpeg;base64,' + encoding_img(image)
+                "url": 'data:image/jpeg;base64,' + encoding_img(image),
+                "detail": 'low'
             }
         })
 
