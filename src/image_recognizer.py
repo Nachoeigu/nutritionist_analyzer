@@ -1,6 +1,6 @@
 import os
 import requests
-from .functions import customizing_request, extracting_info, load_images
+from .functions import customizing_request, extracting_info, load_images, printing_token_usage
 from dotenv import load_dotenv
 
 class InvalidPetition(Exception):
@@ -24,4 +24,6 @@ class ImageRecognizer:
         if response.status_code != 200:
             raise InvalidPetition("Your request wasn´t proccessed correctly...")
         else:
+            print("Token usage for petition in Image Recognizition:")
+            printing_token_usage(response.content)
             return extracting_info(response)

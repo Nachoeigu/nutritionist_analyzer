@@ -34,5 +34,15 @@ def customizing_request(openai_token, model, img_path):
 
     return (custom_header, custom_payload)
 
+def printing_token_usage(content):
+    data = json.loads(content)
+    input_tokens = data['usage']['prompt_tokens']
+    output_tokens = data['usage']['completion_tokens']
+    total_tokens = data['usage']['total_tokens']
+
+    print(f"Prompt tokens usage: {input_tokens}")
+    print(f"Output tokens usage: {output_tokens}")
+    print(f"Total tokens usage: {total_tokens}")
+
 def extracting_info(response):
     return json.loads(response.content)['choices'][0]['message']['content']

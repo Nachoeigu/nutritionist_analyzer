@@ -14,6 +14,7 @@ def main():
 
     print("Review about your product: ")
     print(output)
+    print("Remember that the nutritionist tags the product based on this sorted scale: \n 1) Excellent \n 2) Healthy \n 3) Moderate \n 4) Subpar \n 5) Unhealthy")
 
 if __name__ == '__main__':
     main()
