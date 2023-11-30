@@ -4,23 +4,18 @@ from src.telegram_bot import TelegramBot
 
 
 def main():
-    # choice = input("Choose one option: \n 1) Import an image of the product. \n 2) Put details of the product in text \n Enter your answer here: ")
-    # if choice == '1':
-    #     text_detector = ImageRecognizer()
-    #     info = text_detector.extract_data_from_image()
-    # else:
-    #     info = input('Put the ingredients and nutritional information:')
-
     bot = TelegramBot()
-    telegram_output = bot.paying_attention_to_chatgroup(last_update_in_min=5)
+    telegram_output = bot.paying_attention_to_chatgroup(last_update_in_min=2)
     if telegram_output != False:        
-        last_update, info, type = telegram_output
-        bot.send_message(f"🔍 Let me analyze the {type}...")
+        last_updates, info, types = telegram_output
+        bot.send_message(f"🔍 Let me analyze the {types[0] + 's' if len(types) > 1 else types[0]}...")
         bot.send_message("📌 Remember that I tag them based on this sorted scale: \n 1⃣ Excellent \n 2⃣ Good Choice \n 3⃣ Moderate \n 4⃣ Deficient \n 5⃣ Unhealthy")
         
-        if type == 'photo':
+        if types[0] == 'photo':
             text_detector = ImageRecognizer()
             info = text_detector.extract_data_from_image()
+        elif types[0] == 'text':
+            info = info[0]
 
         nutritionist = Nutritionist()
         output = nutritionist.new_chat(info)

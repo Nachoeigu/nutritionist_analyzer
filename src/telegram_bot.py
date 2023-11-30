@@ -3,7 +3,7 @@ import requests
 from dotenv import load_dotenv
 import logging
 import time
-from .functions import encoding_img
+import random
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ class TelegramBot:
             download_url = f"https://api.telegram.org/file/bot{self.token}/{file_path}"
             response = requests.get(download_url)
 
-            with open('./input_images/output.jpg', 'wb') as file:
+            with open(f'./input_images/output_{str(random.randint(100, 900))}.jpg', 'wb') as file:
                 file.write(response.content)
 
             return True
@@ -55,21 +55,29 @@ class TelegramBot:
         if data == []:
             return False
         
-        last_update = data[-1]['update_id']
         last_minutes = time.time() - (last_update_in_min * 60)
 
         #This is for avoid old messages
         if data[-1]['message']['date'] <= last_minutes:
             return False
-        
-        try:
-            msg = data[-1]['message']['text']
-            output_type = 'text'
-        except:
-            file_id = data[-1]['message']['photo'][-1]['file_id']
-            msg = self.__downloading_pic_from_telegram(file_id = file_id)
-            output_type = 'photo'
+        last_updates = []
+        msgs = []
+        output_types = []
+        for block_of_msg in data:
+            if block_of_msg['message']['date'] <= last_minutes:
+                continue
+            try:
+                msg = block_of_msg['message']['text']
+                output_type = 'text'
+            except:
+                file_id = block_of_msg['message']['photo'][-1]['file_id']
+                msg = self.__downloading_pic_from_telegram(file_id = file_id)
+                output_type = 'photo'
+            last_updates.append(block_of_msg['update_id'])
+            msgs.append(msg)
+            output_types.append(output_type)
 
-        return last_update, msg, output_type
+
+        return last_updates, msgs, output_types
 
     
