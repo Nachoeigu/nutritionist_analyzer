@@ -47,7 +47,7 @@ class TelegramBot:
 
         return None
 
-    def paying_attention_to_chatgroup(self, offset=None, last_update_in_min=15):
+    def paying_attention_to_chatgroup(self, offset=None, last_update_in_min=2, last_update_in_unix=0):
         url = f"https://api.telegram.org/bot{self.token}/getUpdates"
         params = {"offset": offset, 'chat_id': self.chat_id}
         response = requests.get(url, params=params)
@@ -55,7 +55,10 @@ class TelegramBot:
         if data == []:
             return False
         
-        last_minutes = time.time() - (last_update_in_min * 60)
+        if last_update_in_unix == 0:
+            last_minutes = time.time() - (last_update_in_min * 60)
+        else:
+            last_minutes = last_update_in_unix
 
         #This is for avoid old messages
         if data[-1]['message']['date'] <= last_minutes:
