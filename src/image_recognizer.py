@@ -1,6 +1,6 @@
 import os
 import requests
-from .functions import customizing_request, extracting_info, load_images, printing_token_usage
+from .functions import customizing_request, extracting_info, load_images, printing_token_usage, drop_images
 from dotenv import load_dotenv
 
 class InvalidPetition(Exception):
@@ -19,6 +19,8 @@ class ImageRecognizer:
         headers, payload = customizing_request(self.openai_token, 
                             model = self.model,
                             img_path = pic_url)
+        
+        drop_images(pic_url)
         
         response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
 

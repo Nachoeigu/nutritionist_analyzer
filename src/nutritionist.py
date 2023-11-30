@@ -35,6 +35,7 @@ class Nutritionist:
         messages = self.client.beta.threads.messages.list(
             thread_id = self.thread.id
         )
+        print(run)
         result = messages.data[0].content[0].text.value
 
         return result

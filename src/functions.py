@@ -35,6 +35,10 @@ def customizing_request(openai_token, model, img_path):
 
     return (custom_header, custom_payload)
 
+def drop_images(images):
+    for image in images:
+        os.remove(image)
+
 def printing_token_usage(content):
     data = json.loads(content)
     input_tokens = data['usage']['prompt_tokens']

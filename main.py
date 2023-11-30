@@ -13,8 +13,11 @@ def main():
 
     bot = TelegramBot()
     telegram_output = bot.paying_attention_to_chatgroup(last_update_in_min=5)
-    if telegram_output != False:
+    if telegram_output != False:        
         last_update, info, type = telegram_output
+        bot.send_message(f"🔍 Let me analyze the {type}...")
+        bot.send_message("📌 Remember that I tag them based on this sorted scale: \n 1⃣ Excellent \n 2⃣ Good Choice \n 3⃣ Moderate \n 4⃣ Deficient \n 5⃣ Unhealthy")
+        
         if type == 'photo':
             text_detector = ImageRecognizer()
             info = text_detector.extract_data_from_image()
@@ -22,7 +25,7 @@ def main():
         nutritionist = Nutritionist()
         output = nutritionist.new_chat(info)
 
-        output_txt =f"Review about your product: \n\n {output} \n\n Remember that the nutritionist tags the product based on this sorted scale: \n 1) Excellent \n 2) Good Choice \n 3) Moderate \n 4) Deficient \n 5) Unhealthy" 
+        output_txt =f"Review: \n\n {output}" 
 
         bot.send_message(output_txt)
 
