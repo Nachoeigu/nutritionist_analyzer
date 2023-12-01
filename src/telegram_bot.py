@@ -47,7 +47,8 @@ class TelegramBot:
 
         return None
 
-    def paying_attention_to_chatgroup(self, offset=None, last_update_in_min=2, last_update_in_unix=0):
+    def paying_attention_to_chatgroup(self, offset=None, last_update_in_min=2, last_date_executed=None):
+        time.sleep(2)
         url = f"https://api.telegram.org/bot{self.token}/getUpdates"
         params = {"offset": offset, 'chat_id': self.chat_id}
         response = requests.get(url, params=params)
@@ -55,14 +56,15 @@ class TelegramBot:
         if data == []:
             return False
         
-        if last_update_in_unix == 0:
+        if last_date_executed is None:
             last_minutes = time.time() - (last_update_in_min * 60)
         else:
-            last_minutes = last_update_in_unix
+            last_minutes = last_date_executed
 
         #This is for avoid old messages
         if data[-1]['message']['date'] <= last_minutes:
             return False
+        
         last_updates = []
         msgs = []
         output_types = []
@@ -76,7 +78,7 @@ class TelegramBot:
                 file_id = block_of_msg['message']['photo'][-1]['file_id']
                 msg = self.__downloading_pic_from_telegram(file_id = file_id)
                 output_type = 'photo'
-            last_updates.append(block_of_msg['update_id'])
+            last_updates.append(block_of_msg['message']['date'])
             msgs.append(msg)
             output_types.append(output_type)
 
